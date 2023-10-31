@@ -1,33 +1,38 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTable, useGlobalFilter } from 'react-table';
-
+import Popup from './../Popup/Popup';
 import 'tailwindcss/tailwind.css'; // Import Tailwind CSS styles
 import TableToggleButton from '../Button/TableToggleButton';
-
+import Dropdown from "../Dropdown/Dropdown" 
 
 // Example data
-const data  = [
-  { id: 1, name: 'John', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive : <TableToggleButton/>},
-  { id: 1, name: 'Abebe', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive :  <TableToggleButton/>},
-  { id: 1, name: 'Beso', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive :  <TableToggleButton/>},
-  { id: 1, name: 'Bela', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive :  <TableToggleButton/>},
-  { id: 1, name: 'Ende', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive :  <TableToggleButton/>},
-  { id: 1, name: 'Kezas', age: 25 ,  phone : '0929111582' , email : "ab@gmail.com" , acive :  <TableToggleButton/>},
-
+  const data = [
+    { id : 1 , name :'edna mall' ,  latitude:'9.324' ,longitude:'8.4545' ,
+      type : 'office' ,
+      addedby : 'user1' ,
+      address : <Dropdown/> ,
+      status: 'not confirmed' }
+    
+  ];
   
-];
+  const columns = [
+    { Header: 'ID', accessor: 'id' },
+    { Header: 'Name', accessor: 'name' },
+    { Header: 'Latitude', accessor: 'latitude' },
+    { Header: 'Longitude', accessor: 'longitude' },
+    { Header: 'type', accessor: 'type' },
+    { Header: 'added by', accessor: 'addedby' },
+    { Header: 'address', accessor: 'address' },
+    { Header: 'status', accessor: 'status' },
+  ];
 
-const columns  = [
-  { Header: 'ID', accessor: 'id' },
-  { Header: 'Name', accessor: 'name' },
-  { Header: 'Phone', accessor: 'phone' },
-  { Header: 'Email', accessor: 'email' },
-  { Header: 'Active', accessor: 'acive' },
-  
-  // Define more columns as needed
-];
 
-const SalesTable = () => {
+
+
+
+
+const PlacesTable = () => {
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter} = useTable({columns,data,},useGlobalFilter);
 
   const { globalFilter } = state;
@@ -36,6 +41,9 @@ const SalesTable = () => {
     const value = e.target.value || undefined;
     setGlobalFilter(value);
   }, [setGlobalFilter]);
+
+
+
 
   return (
     <div className="container mx-auto mt-8 w-4/5"> {/* 80% of the screen width */}
@@ -80,4 +88,4 @@ const SalesTable = () => {
   );
 };
 
-export default SalesTable;
+export default PlacesTable;
