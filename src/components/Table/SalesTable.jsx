@@ -27,7 +27,7 @@ const columns  = [
   // Define more columns as needed
 ];
 
-const SalesTable = () => {
+const SalesTable = ({userdata}) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter} = useTable({columns,data,},useGlobalFilter);
 
   const { globalFilter } = state;

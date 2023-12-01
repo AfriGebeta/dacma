@@ -31,7 +31,7 @@ import Dropdown from "../Dropdown/Dropdown"
 
 
 
-const PlacesTable = () => {
+const PlacesTable = ({placedata}) => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter} = useTable({columns,data,},useGlobalFilter);
 
