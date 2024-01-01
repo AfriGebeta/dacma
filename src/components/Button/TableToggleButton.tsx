@@ -1,16 +1,34 @@
 import React , {useState} from 'react'
+import {myHeaders , baseurl} from "./../../constant/url"
 
-function TableToggleButton(){
+const  TableToggleButton = ({userid , active}:any) => {
 
 
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(active);
 
     const toggleSwitch = () => {
-      setIsChecked(!isChecked);
+          fetch(baseurl + `/profiles/${userid}` , {
+            method : 'PATCH',
+            headers : myHeaders,
+            body :  JSON.stringify({
+              "active": !isChecked,
+            })
+          })
+          .then((response) =>{
+              if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json()
+          }) 
+          .then((data) => {
+            setIsChecked(!isChecked);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
     };
 
-
-
+   
     return(
         <label className="flex items-center cursor-pointer">
         <div className="relative">

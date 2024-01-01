@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback , useEffect } from 'react';
 import { useTable, useGlobalFilter } from 'react-table';
 import Popup from './../Popup/Popup';
 import 'tailwindcss/tailwind.css'; // Import Tailwind CSS styles
 import TableToggleButton from '../Button/TableToggleButton';
 import Dropdown from "../Dropdown/Dropdown" 
+import { baseurl , token  , myHeaders} from "./../../constant/url";
 
 // Example data
   const data = [
@@ -33,7 +34,51 @@ import Dropdown from "../Dropdown/Dropdown"
 
 const PlacesTable = ({placedata}) => {
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter} = useTable({columns,data,},useGlobalFilter);
+  const [places_data , setPlaces] = useState([])
+
+  const prepareForTable  = (url_data ) => {
+    let table_data = []
+    for(let i=0; i < url_data.length; i++){
+      let _status = 'not confirmed'  
+      if(url_data[i].approvedBy != null) _status = "confirmed"
+  
+      table_data.push({
+        id : url_data[i].id , 
+        name : url_data[i].names.official.EN ,  
+        latitude:url_data[i].location.latitude  ,
+        longitude:url_data[i].location.longitude  ,
+        type : url_data[i].type ,
+        addedby : url_data[i].addedBy.firstName + " " +  url_data[i].addedBy.lastName ,
+        address : <Dropdown address = {url_data[i].address}/> ,
+        status: _status
+      })
+
+    } 
+    return table_data
+  }
+
+  useEffect(() => {
+    fetch(baseurl + "/places" , {
+        method : 'GET',
+        headers : myHeaders
+    })
+        .then((response) =>{
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json()
+        }) 
+        .then((data) => {
+            console.log(data)
+            let table_formatted = prepareForTable(data.data)
+            setPlaces(table_formatted);
+        })
+        .catch((error) => {
+        console.error("Error fetching data:", error);
+    });
+ }, []);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter} = useTable({columns,data:places_data,},useGlobalFilter);
 
   const { globalFilter } = state;
 
